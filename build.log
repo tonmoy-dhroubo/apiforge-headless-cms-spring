@@ -1,0 +1,82 @@
+[INFO] Scanning for projects...
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO] 
+[INFO] ApiForge Headless CMS                                              [pom]
+[INFO] common                                                             [jar]
+[INFO] 
+[INFO] -----------------< com.apiforge:apiforge-headless-cms >-----------------
+[INFO] Building ApiForge Headless CMS 1.0.0                               [1/2]
+[INFO]   from pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.5.0:clean (default-clean) @ apiforge-headless-cms ---
+[INFO] 
+[INFO] --- spring-boot:4.0.0:repackage (repackage) @ apiforge-headless-cms ---
+[INFO] 
+[INFO] --- install:3.1.4:install (default-install) @ apiforge-headless-cms ---
+[INFO] Installing C:\Projects\apiforge\pom.xml to C:\Users\USER\.m2\repository\com\apiforge\apiforge-headless-cms\1.0.0\apiforge-headless-cms-1.0.0.pom
+[INFO] 
+[INFO] ------------------------< com.apiforge:common >-------------------------
+[INFO] Building common 1.0.0                                              [2/2]
+[INFO]   from common\pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.5.0:clean (default-clean) @ common ---
+[INFO] Deleting C:\Projects\apiforge\common\target
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ common ---
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] Copying 0 resource from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.14.1:compile (default-compile) @ common ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 1 source file with javac [debug parameters release 25] to target\classes
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ common ---
+[INFO] skip non existing resourceDirectory C:\Projects\apiforge\common\src\test\resources
+[INFO] 
+[INFO] --- compiler:3.14.1:testCompile (default-testCompile) @ common ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 1 source file with javac [debug parameters release 25] to target\test-classes
+[INFO] -------------------------------------------------------------
+[ERROR] COMPILATION ERROR : 
+[INFO] -------------------------------------------------------------
+[ERROR] /C:/Projects/apiforge/common/src/test/java/com/apiforge/common/CommonApplicationTests.java:[3,29] package org.junit.jupiter.api does not exist
+[ERROR] /C:/Projects/apiforge/common/src/test/java/com/apiforge/common/CommonApplicationTests.java:[4,45] package org.springframework.boot.test.context does not exist
+[ERROR] /C:/Projects/apiforge/common/src/test/java/com/apiforge/common/CommonApplicationTests.java:[6,2] cannot find symbol
+  symbol: class SpringBootTest
+[ERROR] /C:/Projects/apiforge/common/src/test/java/com/apiforge/common/CommonApplicationTests.java:[9,10] cannot find symbol
+  symbol:   class Test
+  location: class com.apiforge.common.CommonApplicationTests
+[INFO] 4 errors 
+[INFO] -------------------------------------------------------------
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary for ApiForge Headless CMS 1.0.0:
+[INFO] 
+[INFO] ApiForge Headless CMS .............................. SUCCESS [  0.541 s]
+[INFO] common ............................................. FAILURE [  1.039 s]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  1.934 s
+[INFO] Finished at: 2025-12-10T00:59:19+06:00
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.14.1:testCompile (default-testCompile) on project common: Compilation failure: Compilation failure: 
+[ERROR] /C:/Projects/apiforge/common/src/test/java/com/apiforge/common/CommonApplicationTests.java:[3,29] package org.junit.jupiter.api does not exist
+[ERROR] /C:/Projects/apiforge/common/src/test/java/com/apiforge/common/CommonApplicationTests.java:[4,45] package org.springframework.boot.test.context does not exist
+[ERROR] /C:/Projects/apiforge/common/src/test/java/com/apiforge/common/CommonApplicationTests.java:[6,2] cannot find symbol
+[ERROR]   symbol: class SpringBootTest
+[ERROR] /C:/Projects/apiforge/common/src/test/java/com/apiforge/common/CommonApplicationTests.java:[9,10] cannot find symbol
+[ERROR]   symbol:   class Test
+[ERROR]   location: class com.apiforge.common.CommonApplicationTests
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException
+[ERROR] 
+[ERROR] After correcting the problems, you can resume the build with the command
+[ERROR]   mvn <args> -rf :common
