@@ -6,3 +6,7 @@ spring:
     driver-class-name: org.postgresql.Driver
   profiles:
     active: dev
+server:
+  port: 8083
+content-type-service:
+  url: http://localhost:8082

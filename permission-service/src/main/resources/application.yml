@@ -6,3 +6,5 @@ spring:
     driver-class-name: org.postgresql.Driver
   profiles:
     active: dev
+server:
+  port: 8085

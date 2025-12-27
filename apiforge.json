@@ -1,0 +1,508 @@
+{
+	"info": {
+		"_postman_id": "b6a8c7d1-1234-5678-90ab-cdef12345678",
+		"name": "ApiForge CMS Demo",
+		"description": "Complete workflow for ApiForge Headless CMS.\n\n**Setup Order:**\n1. Run '01 Auth'\n2. Run '02 Media' (Optional)\n3. Run '03 Content Types' (Define Schema)\n4. Run '04 Permissions' (Grant Access)\n5. Run '05 Content Entries' (CRUD)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "01 - Authentication",
+			"item": [
+				{
+					"name": "1. Register Admin",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"admin\",\n    \"email\": \"admin@apiforge.com\",\n    \"password\": \"password123\",\n    \"firstname\": \"System\",\n    \"lastname\": \"Admin\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/register",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2. Login (Auto-Saves Token)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if (jsonData.data && jsonData.data.token) {",
+									"    pm.environment.set(\"jwt_token\", jsonData.data.token);",
+									"    console.log(\"Token updated successfully\");",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"admin\",\n    \"password\": \"password123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "3. Assign SUPER_ADMIN Role",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"roles\": [\"SUPER_ADMIN\", \"ADMIN\"]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/users/1/roles",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"users",
+								"1",
+								"roles"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "02 - Media Library",
+			"item": [
+				{
+					"name": "Upload File",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"description": "Select an image file here"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/media/upload",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"media",
+								"upload"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Media",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/media",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"media"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "03 - Content Types (Schema)",
+			"item": [
+				{
+					"name": "1. Create 'Author' Type",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Author\",\n  \"pluralName\": \"Authors\",\n  \"apiId\": \"authors\",\n  \"description\": \"Blog post authors\",\n  \"fields\": [\n    {\n      \"name\": \"Full Name\",\n      \"fieldName\": \"full_name\",\n      \"type\": \"SHORT_TEXT\",\n      \"required\": true,\n      \"unique\": false\n    },\n    {\n      \"name\": \"Bio\",\n      \"fieldName\": \"bio\",\n      \"type\": \"LONG_TEXT\",\n      \"required\": false,\n      \"unique\": false\n    }\n  ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/content-types",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"content-types"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2. Create 'Article' Type",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Article\",\n  \"pluralName\": \"Articles\",\n  \"apiId\": \"articles\",\n  \"description\": \"News and blog articles\",\n  \"fields\": [\n    {\n      \"name\": \"Title\",\n      \"fieldName\": \"title\",\n      \"type\": \"SHORT_TEXT\",\n      \"required\": true,\n      \"unique\": true\n    },\n    {\n      \"name\": \"Content\",\n      \"fieldName\": \"content\",\n      \"type\": \"RICH_TEXT\",\n      \"required\": true,\n      \"unique\": false\n    },\n    {\n      \"name\": \"Is Published\",\n      \"fieldName\": \"is_published\",\n      \"type\": \"BOOLEAN\",\n      \"required\": false,\n      \"unique\": false\n    },\n    {\n      \"name\": \"Cover Image\",\n      \"fieldName\": \"cover_image\",\n      \"type\": \"MEDIA\",\n      \"required\": false,\n      \"unique\": false\n    },\n    {\n      \"name\": \"Written By\",\n      \"fieldName\": \"author_id\",\n      \"type\": \"RELATION\",\n      \"targetContentType\": \"authors\",\n      \"relationType\": \"MANY_TO_ONE\",\n      \"required\": false,\n      \"unique\": false\n    }\n  ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/content-types",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"content-types"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Content Types",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/content-types",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"content-types"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "04 - Permissions",
+			"item": [
+				{
+					"name": "Allow CREATE on Articles",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"contentTypeApiId\": \"articles\",\n  \"action\": \"CREATE\",\n  \"allowedRoles\": [\"SUPER_ADMIN\", \"ADMIN\", \"REGISTERED\"]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/permissions/content",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"permissions",
+								"content"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Allow READ on Articles",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"contentTypeApiId\": \"articles\",\n  \"action\": \"READ\",\n  \"allowedRoles\": [\"SUPER_ADMIN\", \"ADMIN\", \"REGISTERED\"]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/permissions/content",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"permissions",
+								"content"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Allow CREATE on Authors",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"contentTypeApiId\": \"authors\",\n  \"action\": \"CREATE\",\n  \"allowedRoles\": [\"SUPER_ADMIN\", \"ADMIN\", \"REGISTERED\"]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/permissions/content",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"permissions",
+								"content"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Allow READ on Authors",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"contentTypeApiId\": \"authors\",\n  \"action\": \"READ\",\n  \"allowedRoles\": [\"SUPER_ADMIN\", \"ADMIN\", \"REGISTERED\"]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/permissions/content",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"permissions",
+								"content"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "05 - Content Entries (Data)",
+			"item": [
+				{
+					"name": "1. Create Author Entry",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"full_name\": \"John Doe\",\n    \"bio\": \"A tech enthusiast and writer.\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/content/authors",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"content",
+								"authors"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2. Create Article Entry",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Getting Started with ApiForge\",\n    \"content\": \"<h1>Hello World</h1><p>This is a headless CMS.</p>\",\n    \"is_published\": true,\n    \"cover_image\": 1,\n    \"author_id\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/content/articles",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"content",
+								"articles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Articles",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/content/articles",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"content",
+								"articles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Articles (Filter)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"is_published\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/content/articles/search",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"content",
+								"articles",
+								"search"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{jwt_token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8080",
+			"type": "string"
+		}
+	]
+}
