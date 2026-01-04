@@ -1,0 +1,13 @@
+SELECT setval(pg_get_serial_sequence('users','id'), COALESCE((SELECT MAX(id) FROM users), 0));
+SELECT setval(pg_get_serial_sequence('roles','id'), COALESCE((SELECT MAX(id) FROM roles), 0));
+SELECT setval(pg_get_serial_sequence('permissions','id'), COALESCE((SELECT MAX(id) FROM permissions), 0));
+SELECT setval(pg_get_serial_sequence('content_types','id'), COALESCE((SELECT MAX(id) FROM content_types), 0));
+SELECT setval(pg_get_serial_sequence('fields','id'), COALESCE((SELECT MAX(id) FROM fields), 0));
+SELECT setval(pg_get_serial_sequence('media','id'), COALESCE((SELECT MAX(id) FROM media), 0));
+SELECT setval(pg_get_serial_sequence('api_permissions','id'), COALESCE((SELECT MAX(id) FROM api_permissions), 0));
+SELECT setval(pg_get_serial_sequence('content_permissions','id'), COALESCE((SELECT MAX(id) FROM content_permissions), 0));
+SELECT setval(pg_get_serial_sequence('ct_author','id'), COALESCE((SELECT MAX(id) FROM ct_author), 0));
+SELECT setval(pg_get_serial_sequence('ct_category','id'), COALESCE((SELECT MAX(id) FROM ct_category), 0));
+SELECT setval(pg_get_serial_sequence('ct_tag','id'), COALESCE((SELECT MAX(id) FROM ct_tag), 0));
+SELECT setval(pg_get_serial_sequence('ct_article','id'), COALESCE((SELECT MAX(id) FROM ct_article), 0));
+SELECT setval(pg_get_serial_sequence('ct_product','id'), COALESCE((SELECT MAX(id) FROM ct_product), 0));
