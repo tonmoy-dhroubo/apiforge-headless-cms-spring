@@ -36,6 +36,9 @@ logs/
 *.tmp
 *.bak
 *.swp
+AGENTS.md
+artifacts/
+reports/
 
 # Build tools
 .mvn/

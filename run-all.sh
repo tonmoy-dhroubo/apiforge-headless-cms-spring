@@ -12,6 +12,12 @@ if [ ! -x "$ROOT/mvnw" ]; then
   chmod +x "$ROOT/mvnw"
 fi
 
+if [ "${SKIP_BUILD:-0}" != "1" ]; then
+  services_csv="$(IFS=,; echo "${SERVICES[*]}")"
+  echo "Building services: $services_csv"
+  "$ROOT/mvnw" -q -DskipTests -pl "$services_csv" -am clean package
+fi
+
 is_running() {
   local pid_file="$1"
   [ -f "$pid_file" ] || return 1
