@@ -12,3 +12,9 @@ spring:
     active: dev
 server:
   port: 8081
+
+jwt:
+  secret: ${JWT_SECRET:apiforge-headless-cms-secret-key-minimum-256-bits-required-for-hs256}
+  expiration: ${JWT_EXPIRATION:3600000}
+  refresh-secret: ${JWT_REFRESH_SECRET:apiforge-headless-cms-refresh-secret-key-minimum-256-bits-required}
+  refresh-expiration: ${JWT_REFRESH_EXPIRATION:604800000}

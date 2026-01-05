@@ -4,6 +4,7 @@ import java.util.List;
 
 public class AuthResponse {
     private String token;
+    private String refreshToken;
     private String type = "Bearer";
     private Long userId;
     private String username;
@@ -13,8 +14,9 @@ public class AuthResponse {
     public AuthResponse() {
     }
 
-    public AuthResponse(String token, String type, Long userId, String username, String email, List<String> roles) {
+    public AuthResponse(String token, String refreshToken, String type, Long userId, String username, String email, List<String> roles) {
         this.token = token;
+        this.refreshToken = refreshToken;
         if (type != null)
             this.type = type;
         this.userId = userId;
@@ -33,6 +35,14 @@ public class AuthResponse {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public String getRefreshToken() {
+        return refreshToken;
+    }
+
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
     }
 
     public String getType() {
@@ -77,6 +87,7 @@ public class AuthResponse {
 
     public static class AuthResponseBuilder {
         private String token;
+        private String refreshToken;
         private String type = "Bearer";
         private Long userId;
         private String username;
@@ -85,6 +96,11 @@ public class AuthResponse {
 
         public AuthResponseBuilder token(String token) {
             this.token = token;
+            return this;
+        }
+
+        public AuthResponseBuilder refreshToken(String refreshToken) {
+            this.refreshToken = refreshToken;
             return this;
         }
 
@@ -114,7 +130,7 @@ public class AuthResponse {
         }
 
         public AuthResponse build() {
-            return new AuthResponse(token, type, userId, username, email, roles);
+            return new AuthResponse(token, refreshToken, type, userId, username, email, roles);
         }
     }
 }

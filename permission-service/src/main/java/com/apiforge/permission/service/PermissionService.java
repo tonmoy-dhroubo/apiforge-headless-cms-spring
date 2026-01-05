@@ -57,7 +57,18 @@ public class PermissionService {
         ApiPermission permission = apiPermissionRepository.findById(id)
                 .orElseThrow(() -> new CustomExceptions.ResourceNotFoundException("API permission not found"));
 
-        permission.setAllowedRoles(dto.getAllowedRoles());
+        if (dto.getContentTypeApiId() != null) {
+            permission.setContentTypeApiId(dto.getContentTypeApiId());
+        }
+        if (dto.getEndpoint() != null) {
+            permission.setEndpoint(dto.getEndpoint());
+        }
+        if (dto.getMethod() != null) {
+            permission.setMethod(dto.getMethod());
+        }
+        if (dto.getAllowedRoles() != null) {
+            permission.setAllowedRoles(dto.getAllowedRoles());
+        }
         permission = apiPermissionRepository.save(permission);
 
         return convertApiPermissionToDto(permission);
@@ -119,7 +130,15 @@ public class PermissionService {
         ContentPermission permission = contentPermissionRepository.findById(id)
                 .orElseThrow(() -> new CustomExceptions.ResourceNotFoundException("Content permission not found"));
 
-        permission.setAllowedRoles(dto.getAllowedRoles());
+        if (dto.getContentTypeApiId() != null) {
+            permission.setContentTypeApiId(dto.getContentTypeApiId());
+        }
+        if (dto.getAction() != null) {
+            permission.setAction(dto.getAction());
+        }
+        if (dto.getAllowedRoles() != null) {
+            permission.setAllowedRoles(dto.getAllowedRoles());
+        }
         permission = contentPermissionRepository.save(permission);
 
         return convertContentPermissionToDto(permission);

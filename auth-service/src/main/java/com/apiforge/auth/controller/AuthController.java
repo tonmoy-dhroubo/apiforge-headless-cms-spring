@@ -39,6 +39,12 @@ public class AuthController {
         return ResponseEntity.ok(ApiResponse.success(valid));
     }
 
+    @PostMapping("/refresh")
+    public ResponseEntity<ApiResponse<AuthResponse>> refresh(@RequestBody RefreshRequest request) {
+        AuthResponse response = authService.refresh(request.getRefreshToken());
+        return ResponseEntity.ok(ApiResponse.success("Token refreshed", response));
+    }
+
     @GetMapping("/users")
     public ResponseEntity<ApiResponse<List<UserDto>>> getAllUsers() {
         List<UserDto> users = userService.getAllUsers();

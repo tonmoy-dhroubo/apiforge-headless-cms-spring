@@ -30,6 +30,14 @@ public class ContentController {
         return ResponseEntity.ok(ApiResponse.success(contents));
     }
 
+    @PostMapping("/search")
+    public ResponseEntity<ApiResponse<List<Map<String, Object>>>> searchContent(
+            @PathVariable String apiId,
+            @RequestBody Map<String, Object> filters) {
+        List<Map<String, Object>> results = contentService.searchContent(apiId, filters);
+        return ResponseEntity.ok(ApiResponse.success(results));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<Map<String, Object>>> getContentById(
             @PathVariable String apiId,

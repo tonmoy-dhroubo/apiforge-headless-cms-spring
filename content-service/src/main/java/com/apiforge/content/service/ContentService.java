@@ -19,11 +19,7 @@ public class ContentService {
     private ContentTypeClientService contentTypeClientService;
 
     public Map<String, Object> createContent(String apiId, Map<String, Object> data) {
-        // Validate content type exists
-        Map<String, Object> contentType = contentTypeClientService.getContentTypeByApiId(apiId);
-        if (contentType == null) {
-             throw new CustomExceptions.ResourceNotFoundException("Content type not found: " + apiId);
-        }
+        ensureContentTypeExists(apiId);
 
         // Validate fields against schema (simplified - assume valid for now)
         // Ideally we iterate over contentType['fields'] and check data types and required fields
@@ -33,13 +29,24 @@ public class ContentService {
     }
 
     public List<Map<String, Object>> getAllContent(String apiId) {
+        ensureContentTypeExists(apiId);
         String tableName = "ct_" + apiId;
         // Verify table/content type existence implicitly via catch or explicit check
         // Ideally explicit check via client service
         return dynamicContentRepository.findAll(tableName);
     }
 
+    public List<Map<String, Object>> searchContent(String apiId, Map<String, Object> filters) {
+        ensureContentTypeExists(apiId);
+        String tableName = "ct_" + apiId;
+        if (filters == null || filters.isEmpty()) {
+            return dynamicContentRepository.findAll(tableName);
+        }
+        return dynamicContentRepository.findWithFilters(tableName, filters);
+    }
+
     public Map<String, Object> getContentById(String apiId, Long id) {
+        ensureContentTypeExists(apiId);
         String tableName = "ct_" + apiId;
         Map<String, Object> content = dynamicContentRepository.findById(tableName, id);
         if (content == null) {
@@ -64,5 +71,12 @@ public class ContentService {
 
         String tableName = "ct_" + apiId;
         dynamicContentRepository.delete(tableName, id);
+    }
+
+    private void ensureContentTypeExists(String apiId) {
+        Map<String, Object> contentType = contentTypeClientService.getContentTypeByApiId(apiId);
+        if (contentType == null) {
+            throw new CustomExceptions.ResourceNotFoundException("Content type not found: " + apiId);
+        }
     }
 }

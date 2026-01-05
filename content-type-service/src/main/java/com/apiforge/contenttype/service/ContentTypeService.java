@@ -30,7 +30,7 @@ public class ContentTypeService {
 
         ContentType contentType = ContentType.builder()
                 .name(dto.getName())
-                .pluralName(dto.getPluralName())
+                .pluralName(dto.getPluralName() != null ? dto.getPluralName() : dto.getName() + "s")
                 .apiId(dto.getApiId())
                 .description(dto.getDescription())
                 .build();
@@ -87,9 +87,15 @@ public class ContentTypeService {
         ContentType contentType = contentTypeRepository.findById(id)
                 .orElseThrow(() -> new CustomExceptions.ResourceNotFoundException("Content type not found"));
 
-        contentType.setName(dto.getName());
-        contentType.setPluralName(dto.getPluralName());
-        contentType.setDescription(dto.getDescription());
+        if (dto.getName() != null) {
+            contentType.setName(dto.getName());
+        }
+        if (dto.getPluralName() != null) {
+            contentType.setPluralName(dto.getPluralName());
+        }
+        if (dto.getDescription() != null) {
+            contentType.setDescription(dto.getDescription());
+        }
 
         // Handle field updates - this is a simplification, ideally should migrate schema
         if (dto.getFields() != null) {

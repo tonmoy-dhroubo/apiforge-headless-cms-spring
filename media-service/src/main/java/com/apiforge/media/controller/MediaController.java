@@ -49,6 +49,7 @@ public class MediaController {
     @GetMapping("/files/{fileName:.+}")
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) {
         Resource resource = mediaService.loadFileAsResource(fileName);
+        Media media = mediaService.findByFilename(fileName);
 
         String contentType = null;
         try {
@@ -59,6 +60,16 @@ public class MediaController {
 
         if (contentType == null) {
             contentType = "application/octet-stream";
+        }
+
+        if (media != null && media.getName() != null) {
+            String safeName = media.getName().replace("\"", "");
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType(contentType))
+                    .header(HttpHeaders.CONTENT_DISPOSITION,
+                            "attachment; filename=\"" + safeName + "\"; filename*=UTF-8''" +
+                                    java.net.URLEncoder.encode(media.getName(), java.nio.charset.StandardCharsets.UTF_8))
+                    .body(resource);
         }
 
         return ResponseEntity.ok()

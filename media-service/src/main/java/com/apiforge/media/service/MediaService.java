@@ -47,9 +47,10 @@ public class MediaService {
         if (i > 0) {
             extension = originalFileName.substring(i);
         }
-        
+
         String hash = UUID.randomUUID().toString();
         String fileName = hash + extension;
+        String storedName = resolveUniqueName(originalFileName);
 
         try {
             if (originalFileName.contains("..")) {
@@ -60,12 +61,12 @@ public class MediaService {
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 
             Media media = Media.builder()
-                .name(originalFileName)
+                .name(storedName)
                 .hash(hash)
                 .ext(extension)
                 .mime(file.getContentType())
                 .size((double) file.getSize() / 1024) // KB
-                .url("/uploads/" + fileName)
+                .url("/api/upload/files/" + fileName)
                 .provider("local")
                 .build();
             
@@ -98,6 +99,16 @@ public class MediaService {
                 .orElseThrow(() -> new CustomExceptions.ResourceNotFoundException("Media not found"));
     }
 
+    public Media findByFilename(String filename) {
+        String extension = "";
+        int i = filename.lastIndexOf('.');
+        if (i > 0) {
+            extension = filename.substring(i);
+        }
+        String hash = filename.substring(0, filename.length() - extension.length());
+        return mediaRepository.findByHashAndExt(hash, extension).orElse(null);
+    }
+
     public void deleteMedia(Long id) {
         Media media = getMediaById(id);
         
@@ -111,5 +122,27 @@ public class MediaService {
         }
 
         mediaRepository.delete(media);
+    }
+
+    private String resolveUniqueName(String originalFileName) {
+        if (originalFileName == null || originalFileName.isBlank()) {
+            return "upload";
+        }
+
+        String base = originalFileName;
+        String extension = "";
+        int i = originalFileName.lastIndexOf('.');
+        if (i > 0) {
+            base = originalFileName.substring(0, i);
+            extension = originalFileName.substring(i);
+        }
+
+        String candidate = base + extension;
+        int counter = 1;
+        while (mediaRepository.existsByName(candidate)) {
+            candidate = base + "-" + counter + extension;
+            counter++;
+        }
+        return candidate;
     }
 }

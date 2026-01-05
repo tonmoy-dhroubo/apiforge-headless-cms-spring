@@ -70,9 +70,11 @@ public class AuthService {
                 .collect(Collectors.toList());
 
         String token = jwtService.generateToken(user.getUsername(), user.getId(), roleNames);
+        String refreshToken = jwtService.generateRefreshToken(user.getUsername(), user.getId(), roleNames);
 
         return AuthResponse.builder()
                 .token(token)
+                .refreshToken(refreshToken)
                 .userId(user.getId())
                 .username(user.getUsername())
                 .email(user.getEmail())
@@ -81,8 +83,23 @@ public class AuthService {
     }
 
     public AuthResponse login(LoginRequest request) {
-        User user = userRepository.findByUsername(request.getUsername())
-                .orElseThrow(() -> new CustomExceptions.UnauthorizedException("Invalid credentials"));
+        String identifier = request.getUsername();
+        if ((identifier == null || identifier.isBlank()) && request.getEmail() != null) {
+            identifier = request.getEmail();
+        }
+
+        if (identifier == null || identifier.isBlank()) {
+            throw new CustomExceptions.UnauthorizedException("Username or email is required");
+        }
+
+        User user = userRepository.findByUsername(identifier).orElse(null);
+        if (user == null) {
+            user = userRepository.findByEmail(identifier).orElse(null);
+        }
+
+        if (user == null) {
+            throw new CustomExceptions.UnauthorizedException("Invalid credentials");
+        }
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new CustomExceptions.UnauthorizedException("Invalid credentials");
@@ -97,9 +114,11 @@ public class AuthService {
                 .collect(Collectors.toList());
 
         String token = jwtService.generateToken(user.getUsername(), user.getId(), roleNames);
+        String refreshToken = jwtService.generateRefreshToken(user.getUsername(), user.getId(), roleNames);
 
         return AuthResponse.builder()
                 .token(token)
+                .refreshToken(refreshToken)
                 .userId(user.getId())
                 .username(user.getUsername())
                 .email(user.getEmail())
@@ -109,5 +128,35 @@ public class AuthService {
 
     public boolean validateToken(String token) {
         return jwtService.validateToken(token);
+    }
+
+    public AuthResponse refresh(String refreshToken) {
+        if (!jwtService.validateRefreshToken(refreshToken)) {
+            throw new CustomExceptions.UnauthorizedException("Invalid refresh token");
+        }
+
+        Long userId = jwtService.extractRefreshUserId(refreshToken);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomExceptions.UnauthorizedException("Invalid refresh token"));
+
+        if (!user.getEnabled()) {
+            throw new CustomExceptions.ForbiddenException("Account is disabled");
+        }
+
+        List<String> roleNames = user.getRoles().stream()
+                .map(Role::getName)
+                .collect(Collectors.toList());
+
+        String token = jwtService.generateToken(user.getUsername(), user.getId(), roleNames);
+        String nextRefreshToken = jwtService.generateRefreshToken(user.getUsername(), user.getId(), roleNames);
+
+        return AuthResponse.builder()
+                .token(token)
+                .refreshToken(nextRefreshToken)
+                .userId(user.getId())
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .roles(roleNames)
+                .build();
     }
 }
