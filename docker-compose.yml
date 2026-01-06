@@ -1,0 +1,48 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: devdb
+      POSTGRES_USER: dev
+      POSTGRES_PASSWORD: devpass
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./db/00_ddl.sql:/docker-entrypoint-initdb.d/00_ddl.sql:ro
+      - ./db/01_seed_auth.sql:/docker-entrypoint-initdb.d/01_seed_auth.sql:ro
+      - ./db/02_seed_media.sql:/docker-entrypoint-initdb.d/02_seed_media.sql:ro
+      - ./db/03_seed_content_types.sql:/docker-entrypoint-initdb.d/03_seed_content_types.sql:ro
+      - ./db/04_seed_dynamic_content.sql:/docker-entrypoint-initdb.d/04_seed_dynamic_content.sql:ro
+      - ./db/05_seed_permissions.sql:/docker-entrypoint-initdb.d/05_seed_permissions.sql:ro
+      - ./db/99_reset_sequences.sql:/docker-entrypoint-initdb.d/99_reset_sequences.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  app:
+    build: .
+    environment:
+      APIFORGE_DATASOURCE_HOST: db:5432
+      APIFORGE_DATASOURCE_DB_NAME: devdb
+      APIFORGE_DATASOURCE_USERNAME: dev
+      APIFORGE_DATASOURCE_PASSWORD: devpass
+      APIFORGE_DATASOURCE_PARAMS: sslmode=disable
+      JWT_SECRET: apiforge-headless-cms-secret-key-minimum-256-bits-required-for-hs256
+      JWT_REFRESH_SECRET: apiforge-headless-cms-refresh-secret-key-minimum-256-bits-required
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+      - "8082:8082"
+      - "8083:8083"
+      - "8084:8084"
+      - "8085:8085"
+    volumes:
+      - uploads:/app/uploads
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  pgdata:
+  uploads:

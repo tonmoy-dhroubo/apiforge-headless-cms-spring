@@ -1,5 +1,5 @@
 apiforge:
   datasource:
-    host: ep-lingering-rain-ahbp23u9-pooler.c-3.us-east-1.aws.neon.tech
+    host: localhost:5432
     params: sslmode=require&channelBinding=require
     driver-class-name: org.postgresql.Driver

@@ -1,5 +1,5 @@
 apiforge:
   datasource:
-    db-name: neondb
-    username: your_db_user
-    password: your_db_password
+    db-name: devdb
+    username: dev
+    password: devpass

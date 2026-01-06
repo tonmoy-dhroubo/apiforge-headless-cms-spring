@@ -1,0 +1,13 @@
+.git
+.run
+**/target
+**/*.log
+
+artifacts
+reports
+
+README*.md
+HELP.md
+TECHNICAL_DOCUMENTATION.md
+build*.log
+build_results_out
