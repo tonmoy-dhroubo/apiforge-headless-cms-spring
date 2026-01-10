@@ -18,7 +18,6 @@ public class PermissionController {
     @Autowired
     private PermissionService permissionService;
 
-    // API Permission endpoints
     @PostMapping("/api")
     public ResponseEntity<ApiResponse<ApiPermissionDto>> createApiPermission(@RequestBody ApiPermissionDto dto) {
         ApiPermissionDto created = permissionService.createApiPermission(dto);
@@ -69,7 +68,6 @@ public class PermissionController {
         return ResponseEntity.ok(ApiResponse.success(hasPermission));
     }
 
-    // Content Permission endpoints
     @PostMapping("/content")
     public ResponseEntity<ApiResponse<ContentPermissionDto>> createContentPermission(@RequestBody ContentPermissionDto dto) {
         ContentPermissionDto created = permissionService.createContentPermission(dto);

@@ -29,12 +29,10 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
         return (exchange, chain) -> {
             ServerHttpRequest request = exchange.getRequest();
 
-            // Skip authentication for login and register endpoints
             if (isAuthEndpoint(request)) {
                 return chain.filter(exchange);
             }
 
-            // Check for Authorization header
             String authHeader = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
             if (authHeader == null || !authHeader.startsWith("Bearer ")) {
                 return onError(exchange, "Invalid authorization header", HttpStatus.UNAUTHORIZED);
@@ -47,7 +45,6 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
                     return onError(exchange, "Invalid or expired token", HttpStatus.UNAUTHORIZED);
                 }
 
-                // Extract user info and add to request headers so downstream services can use it
                 String username = jwtUtil.extractUsername(token);
                 Long userId = jwtUtil.extractUserId(token);
                 List<String> roles = jwtUtil.extractRoles(token);
@@ -68,11 +65,10 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
 
     private boolean isAuthEndpoint(ServerHttpRequest request) {
         String path = request.getPath().toString();
-        // Allow public access to auth endpoints and media files
         return path.contains("/api/auth/login") || 
                path.contains("/api/auth/register") ||
                path.contains("/api/auth/validate") ||
-               path.contains("/api/media/files"); // Allow public viewing of images
+               path.contains("/api/media/files");
     }
 
     private Mono<Void> onError(ServerWebExchange exchange, String message, HttpStatus status) {
@@ -82,6 +78,5 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
     }
 
     public static class Config {
-        // Configuration properties if needed
     }
 }

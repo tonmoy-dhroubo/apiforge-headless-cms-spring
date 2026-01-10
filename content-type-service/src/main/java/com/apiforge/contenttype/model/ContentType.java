@@ -16,13 +16,13 @@ public class ContentType {
     private Long id;
 
     @Column(unique = true, nullable = false)
-    private String name; // Singular name: Article, Product
+    private String name;
 
     @Column(unique = true, nullable = false)
-    private String pluralName; // Plural name: Articles, Products
+    private String pluralName;
 
     @Column(unique = true, nullable = false)
-    private String apiId; // API identifier: articles, products
+    private String apiId;
 
     private String description;
 
@@ -53,7 +53,6 @@ public class ContentType {
         return new ContentTypeBuilder();
     }
 
-    // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public String getName() { return name; }
