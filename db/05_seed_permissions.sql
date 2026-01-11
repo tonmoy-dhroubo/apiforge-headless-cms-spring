@@ -96,9 +96,9 @@ INSERT INTO api_permission_roles (permission_id, role_name) VALUES
     (14, 'SUPER_ADMIN'), (14, 'ADMIN'), (14, 'MODERATOR'),
     (15, 'SUPER_ADMIN'), (15, 'ADMIN'),
 
-    (16, 'SUPER_ADMIN'), (16, 'ADMIN'), (16, 'MODERATOR'), (16, 'REGISTERED'),
+    (16, 'SUPER_ADMIN'), (16, 'ADMIN'), (16, 'MODERATOR'), (16, 'REGISTERED'), (16, 'PUBLIC'),
     (17, 'SUPER_ADMIN'), (17, 'ADMIN'), (17, 'MODERATOR'),
-    (18, 'SUPER_ADMIN'), (18, 'ADMIN'), (18, 'MODERATOR'), (18, 'REGISTERED'),
+    (18, 'SUPER_ADMIN'), (18, 'ADMIN'), (18, 'MODERATOR'), (18, 'REGISTERED'), (18, 'PUBLIC'),
     (19, 'SUPER_ADMIN'), (19, 'ADMIN'), (19, 'MODERATOR'),
     (20, 'SUPER_ADMIN'), (20, 'ADMIN'),
 

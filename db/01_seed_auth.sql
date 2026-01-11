@@ -2,7 +2,8 @@ INSERT INTO roles (id, name, description) VALUES
     (1, 'SUPER_ADMIN', 'Full system access'),
     (2, 'ADMIN', 'Administrative access'),
     (3, 'MODERATOR', 'Content moderation access'),
-    (4, 'REGISTERED', 'Default registered user');
+    (4, 'REGISTERED', 'Default registered user'),
+    (5, 'PUBLIC', 'Unauthenticated access role');
 
 INSERT INTO permissions (id, name, description) VALUES
     (1, 'MANAGE_USERS', 'Create and manage users'),

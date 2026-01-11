@@ -6,3 +6,5 @@ spring:
   profiles:
     active: dev
 
+apiforge:
+  permission-service-url: http://localhost:8085
