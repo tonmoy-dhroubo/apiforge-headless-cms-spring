@@ -24,8 +24,8 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .cors(withDefaults())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/upload/files/**").permitAll() // Allow public access to files
-                        .anyRequest().permitAll() // Simplify for now
+                        .requestMatchers("/api/upload/files/**").permitAll()
+                        .anyRequest().permitAll()
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)

@@ -14,7 +14,7 @@ public class Field {
     private String name;
 
     @Column(nullable = false)
-    private String fieldName; // Database column name
+    private String fieldName;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -24,9 +24,8 @@ public class Field {
 
     private Boolean unique;
 
-    // For relation fields
     private String targetContentType;
-    private String relationType; // ONE_TO_ONE, ONE_TO_MANY, MANY_TO_MANY
+    private String relationType;
 
     @ManyToOne
     @JoinColumn(name = "content_type_id")
@@ -52,7 +51,6 @@ public class Field {
         return new FieldBuilder();
     }
 
-    // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public String getName() { return name; }

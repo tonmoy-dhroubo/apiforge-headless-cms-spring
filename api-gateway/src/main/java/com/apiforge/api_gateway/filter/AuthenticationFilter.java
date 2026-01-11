@@ -41,12 +41,10 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
         return (exchange, chain) -> {
             ServerHttpRequest request = exchange.getRequest();
 
-            // Skip authentication for login and register endpoints
             if (isAuthEndpoint(request)) {
                 return chain.filter(exchange);
             }
 
-            // Check for Authorization header
             String authHeader = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
             if (authHeader == null || authHeader.isBlank()) {
                 return authorizePublicAccess(exchange, chain);
@@ -62,7 +60,6 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
                     return onError(exchange, "Invalid or expired token", HttpStatus.UNAUTHORIZED);
                 }
 
-                // Extract user info and add to request headers so downstream services can use it
                 String username = jwtUtil.extractUsername(token);
                 Long userId = jwtUtil.extractUserId(token);
                 List<String> roles = jwtUtil.extractRoles(token);
@@ -155,6 +152,5 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
     }
 
     public static class Config {
-        // Configuration properties if needed
     }
 }

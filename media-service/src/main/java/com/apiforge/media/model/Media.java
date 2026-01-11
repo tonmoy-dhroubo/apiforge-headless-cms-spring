@@ -26,7 +26,7 @@ public class Media {
     private String mime;
     private Double size;
     private String url;
-    private String provider; // local, aws-s3, cloudinary
+    private String provider;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
@@ -57,7 +57,6 @@ public class Media {
         return new MediaBuilder();
     }
 
-    // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public String getName() { return name; }

@@ -22,7 +22,6 @@ public class PermissionService {
     @Autowired
     private ContentPermissionRepository contentPermissionRepository;
 
-    // API Permission methods
     public ApiPermissionDto createApiPermission(ApiPermissionDto dto) {
         ApiPermission permission = ApiPermission.builder()
                 .contentTypeApiId(dto.getContentTypeApiId())
@@ -86,8 +85,6 @@ public class PermissionService {
                 .findByContentTypeApiIdAndEndpointAndMethod(contentTypeApiId, endpoint, method)
                 .orElse(null);
 
-        // If no explicit permission is set, deny by default (secure by default)
-        // Alternatively, you can allow by default if that's the preferred strategy
         if (permission == null) {
             return false; 
         }
@@ -96,7 +93,6 @@ public class PermissionService {
                 .anyMatch(userRoles::contains);
     }
 
-    // Content Permission methods
     public ContentPermissionDto createContentPermission(ContentPermissionDto dto) {
         ContentPermission permission = ContentPermission.builder()
                 .contentTypeApiId(dto.getContentTypeApiId())
@@ -164,7 +160,6 @@ public class PermissionService {
                 .anyMatch(userRoles::contains);
     }
 
-    // Conversion methods
     private ApiPermissionDto convertApiPermissionToDto(ApiPermission permission) {
         return ApiPermissionDto.builder()
                 .id(permission.getId())

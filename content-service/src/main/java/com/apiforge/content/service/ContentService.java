@@ -21,9 +21,6 @@ public class ContentService {
     public Map<String, Object> createContent(String apiId, Map<String, Object> data) {
         ensureContentTypeExists(apiId);
 
-        // Validate fields against schema (simplified - assume valid for now)
-        // Ideally we iterate over contentType['fields'] and check data types and required fields
-
         String tableName = "ct_" + apiId;
         return dynamicContentRepository.create(tableName, data);
     }
@@ -31,8 +28,6 @@ public class ContentService {
     public List<Map<String, Object>> getAllContent(String apiId) {
         ensureContentTypeExists(apiId);
         String tableName = "ct_" + apiId;
-        // Verify table/content type existence implicitly via catch or explicit check
-        // Ideally explicit check via client service
         return dynamicContentRepository.findAll(tableName);
     }
 
@@ -57,7 +52,6 @@ public class ContentService {
 
     @Transactional
     public Map<String, Object> updateContent(String apiId, Long id, Map<String, Object> data) {
-        // Check existence
         getContentById(apiId, id);
         
         String tableName = "ct_" + apiId;
@@ -66,7 +60,6 @@ public class ContentService {
 
     @Transactional
     public void deleteContent(String apiId, Long id) {
-        // Check existence
         getContentById(apiId, id);
 
         String tableName = "ct_" + apiId;

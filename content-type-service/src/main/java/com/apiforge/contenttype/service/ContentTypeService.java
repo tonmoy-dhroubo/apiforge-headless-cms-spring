@@ -58,7 +58,6 @@ public class ContentTypeService {
 
         ContentType savedContentType = contentTypeRepository.save(contentType);
 
-        // Create dynamic table
         dynamicTableService.createTableForContentType("ct_" + dto.getApiId(), savedContentType.getFields());
 
         return convertToDto(savedContentType);
@@ -97,7 +96,6 @@ public class ContentTypeService {
             contentType.setDescription(dto.getDescription());
         }
 
-        // Handle field updates - this is a simplification, ideally should migrate schema
         if (dto.getFields() != null) {
             final ContentType finalContentType = contentType;
             List<Field> newFields = dto.getFields().stream()
@@ -123,9 +121,6 @@ public class ContentTypeService {
 
         ContentType savedContentType = contentTypeRepository.save(contentType);
 
-        // Note: Schema migration for updates is complex and not fully implemented here
-        // Ideally we should call dynamicTableService to add/remove columns
-
         return convertToDto(savedContentType);
     }
 
@@ -134,7 +129,6 @@ public class ContentTypeService {
         ContentType contentType = contentTypeRepository.findById(id)
                 .orElseThrow(() -> new CustomExceptions.ResourceNotFoundException("Content type not found"));
 
-        // Drop dynamic table
         dynamicTableService.dropTableForContentType("ct_" + contentType.getApiId());
 
         contentTypeRepository.delete(contentType);
