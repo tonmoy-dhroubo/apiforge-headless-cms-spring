@@ -6,6 +6,7 @@ PID_DIR="$ROOT/.run/pids"
 LOG_DIR="$ROOT/.run/logs"
 UPLOAD_DIR="$ROOT/uploads"
 SERVICES=(api-gateway auth-service content-type-service content-service media-service permission-service)
+DEFAULT_JAVA_OPTS=(-Dio.netty.noUnsafe=true -Dio.netty.noNative=true)
 
 mkdir -p "$PID_DIR" "$LOG_DIR" "$UPLOAD_DIR"
 
@@ -37,7 +38,7 @@ for s in "${SERVICES[@]}"; do
   log_file="$LOG_DIR/$s.log"
   : >"$log_file"
 
-  java ${JAVA_OPTS:-} -jar "$ROOT/services/$s.jar" >>"$log_file" 2>&1 &
+  java ${JAVA_OPTS:-} "${DEFAULT_JAVA_OPTS[@]}" -jar "$ROOT/services/$s.jar" >>"$log_file" 2>&1 &
   pid=$!
 
   echo "$pid" >"$PID_DIR/$s.pid"

@@ -3,6 +3,9 @@ package com.apiforge.media.controller;
 import com.apiforge.media.model.Media;
 import com.apiforge.media.service.MediaService;
 import com.apiforge.common.dto.ApiResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -29,6 +32,56 @@ public class MediaController {
     }
 
     @GetMapping
+    @Operation(
+            summary = "List media",
+            responses = @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "200",
+                    description = "Seeded media entries",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = @ExampleObject(
+                                    name = "SeededMedia",
+                                    value = """
+                                            {
+                                              "success": true,
+                                              "message": null,
+                                              "data": [
+                                                {
+                                                  "id": 1,
+                                                  "name": "hero-mountains",
+                                                  "alternativeText": "Mountain landscape",
+                                                  "caption": "Snowy mountain range",
+                                                  "width": 1920,
+                                                  "height": 1080,
+                                                  "hash": "hash_mountains_01",
+                                                  "ext": ".jpg",
+                                                  "mime": "image/jpeg",
+                                                  "size": 1.82,
+                                                  "url": "https://cdn.apiforge.local/media/hero-mountains.jpg",
+                                                  "provider": "local"
+                                                },
+                                                {
+                                                  "id": 2,
+                                                  "name": "author-jane",
+                                                  "alternativeText": "Portrait of Jane Doe",
+                                                  "caption": "Author portrait",
+                                                  "width": 800,
+                                                  "height": 800,
+                                                  "hash": "hash_author_jane",
+                                                  "ext": ".jpg",
+                                                  "mime": "image/jpeg",
+                                                  "size": 0.64,
+                                                  "url": "https://cdn.apiforge.local/media/author-jane.jpg",
+                                                  "provider": "local"
+                                                }
+                                              ],
+                                              "error": null
+                                            }
+                                            """
+                            )
+                    )
+            )
+    )
     public ResponseEntity<ApiResponse<List<Media>>> getAllMedia() {
         List<Media> mediaList = mediaService.getAllMedia();
         return ResponseEntity.ok(ApiResponse.success(mediaList));

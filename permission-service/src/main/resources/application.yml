@@ -8,6 +8,10 @@ spring:
     username: ${apiforge.datasource.username}
     password: ${apiforge.datasource.password}
     driver-class-name: ${apiforge.datasource.driver-class-name}
+  jpa:
+    open-in-view: false
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration
   profiles:
     active: dev
 server:

@@ -8,10 +8,26 @@ spring:
     username: ${apiforge.datasource.username}
     password: ${apiforge.datasource.password}
     driver-class-name: ${apiforge.datasource.driver-class-name}
+  jpa:
+    open-in-view: false
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration
   profiles:
     active: dev
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID:}
+            client-secret: ${GOOGLE_CLIENT_SECRET:}
+            scope: openid,profile,email
+        provider:
+          google:
+            issuer-uri: https://accounts.google.com
 server:
   port: 7081
+  forward-headers-strategy: framework
 
 jwt:
   secret: ${JWT_SECRET:apiforge-headless-cms-secret-key-minimum-256-bits-required-for-hs256}

@@ -73,11 +73,16 @@ for s in "${SERVICES[@]}"; do
   fi
 
   log_file="$LOG_DIR/$s.log"
+  jar_file="$(find "$ROOT/$s/target" -maxdepth 1 -type f -name "$s-*.jar" ! -name "*original*" -print -quit)"
+  if [ -z "${jar_file:-}" ]; then
+    echo "Missing jar for $s. Rebuild with ./run-all.sh (or run ./mvnw -pl $s -am package)."
+    continue
+  fi
   SPRING_DATASOURCE_URL="$SPRING_DATASOURCE_URL" \
   SPRING_DATASOURCE_USERNAME="$SPRING_DATASOURCE_USERNAME" \
   SPRING_DATASOURCE_PASSWORD="$SPRING_DATASOURCE_PASSWORD" \
   SPRING_DATASOURCE_DRIVER_CLASS_NAME="$SPRING_DATASOURCE_DRIVER_CLASS_NAME" \
-  nohup "$ROOT/mvnw" -q -pl "$s" spring-boot:run >"$log_file" 2>&1 &
+  nohup java ${JAVA_OPTS:-} -Dio.netty.noUnsafe=true -Dio.netty.noNative=true -jar "$jar_file" >"$log_file" 2>&1 &
   echo $! >"$pid_file"
   printf "%-24s %s\n" "$s" "started (pid $(cat "$pid_file"), log $log_file)"
 done

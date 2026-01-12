@@ -4,6 +4,9 @@ import com.apiforge.common.dto.ApiResponse;
 import com.apiforge.permission.dto.ApiPermissionDto;
 import com.apiforge.permission.dto.ContentPermissionDto;
 import com.apiforge.permission.service.PermissionService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +28,42 @@ public class PermissionController {
     }
 
     @GetMapping("/api")
+    @Operation(
+            summary = "List API permissions",
+            responses = @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "200",
+                    description = "Seeded API permissions",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = @ExampleObject(
+                                    name = "SeededApiPermissions",
+                                    value = """
+                                            {
+                                              "success": true,
+                                              "message": null,
+                                              "data": [
+                                                {
+                                                  "id": 1,
+                                                  "contentTypeApiId": "author",
+                                                  "endpoint": "/api/content/author",
+                                                  "method": "GET",
+                                                  "allowedRoles": ["SUPER_ADMIN", "ADMIN", "MODERATOR", "REGISTERED"]
+                                                },
+                                                {
+                                                  "id": 16,
+                                                  "contentTypeApiId": "article",
+                                                  "endpoint": "/api/content/article",
+                                                  "method": "GET",
+                                                  "allowedRoles": ["SUPER_ADMIN", "ADMIN", "MODERATOR", "REGISTERED", "PUBLIC"]
+                                                }
+                                              ],
+                                              "error": null
+                                            }
+                                            """
+                            )
+                    )
+            )
+    )
     public ResponseEntity<ApiResponse<List<ApiPermissionDto>>> getAllApiPermissions() {
         List<ApiPermissionDto> permissions = permissionService.getAllApiPermissions();
         return ResponseEntity.ok(ApiResponse.success(permissions));
@@ -75,6 +114,40 @@ public class PermissionController {
     }
 
     @GetMapping("/content")
+    @Operation(
+            summary = "List content permissions",
+            responses = @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "200",
+                    description = "Seeded content permissions",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = @ExampleObject(
+                                    name = "SeededContentPermissions",
+                                    value = """
+                                            {
+                                              "success": true,
+                                              "message": null,
+                                              "data": [
+                                                {
+                                                  "id": 2,
+                                                  "contentTypeApiId": "author",
+                                                  "action": "READ",
+                                                  "allowedRoles": ["SUPER_ADMIN", "ADMIN", "MODERATOR", "REGISTERED"]
+                                                },
+                                                {
+                                                  "id": 14,
+                                                  "contentTypeApiId": "article",
+                                                  "action": "READ",
+                                                  "allowedRoles": ["SUPER_ADMIN", "ADMIN", "MODERATOR", "REGISTERED"]
+                                                }
+                                              ],
+                                              "error": null
+                                            }
+                                            """
+                            )
+                    )
+            )
+    )
     public ResponseEntity<ApiResponse<List<ContentPermissionDto>>> getAllContentPermissions() {
         List<ContentPermissionDto> permissions = permissionService.getAllContentPermissions();
         return ResponseEntity.ok(ApiResponse.success(permissions));

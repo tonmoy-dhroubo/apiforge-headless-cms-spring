@@ -3,6 +3,9 @@ package com.apiforge.contenttype.controller;
 import com.apiforge.contenttype.dto.ContentTypeDto;
 import com.apiforge.contenttype.service.ContentTypeService;
 import com.apiforge.common.dto.ApiResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +26,77 @@ public class ContentTypeController {
     }
 
     @GetMapping
+    @Operation(
+            summary = "List content types",
+            responses = @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "200",
+                    description = "Seeded content types",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = @ExampleObject(
+                                    name = "SeededContentTypes",
+                                    value = """
+                                            {
+                                              "success": true,
+                                              "message": null,
+                                              "data": [
+                                                {
+                                                  "id": 1,
+                                                  "name": "Author",
+                                                  "pluralName": "Authors",
+                                                  "apiId": "author",
+                                                  "description": "Writer profiles for editorial content",
+                                                  "fields": [
+                                                    {
+                                                      "id": 1,
+                                                      "name": "Name",
+                                                      "fieldName": "name",
+                                                      "type": "SHORT_TEXT",
+                                                      "required": true,
+                                                      "unique": false,
+                                                      "targetContentType": null,
+                                                      "relationType": null
+                                                    },
+                                                    {
+                                                      "id": 2,
+                                                      "name": "Bio",
+                                                      "fieldName": "bio",
+                                                      "type": "LONG_TEXT",
+                                                      "required": false,
+                                                      "unique": false,
+                                                      "targetContentType": null,
+                                                      "relationType": null
+                                                    },
+                                                    {
+                                                      "id": 3,
+                                                      "name": "Email",
+                                                      "fieldName": "email",
+                                                      "type": "SHORT_TEXT",
+                                                      "required": false,
+                                                      "unique": true,
+                                                      "targetContentType": null,
+                                                      "relationType": null
+                                                    },
+                                                    {
+                                                      "id": 4,
+                                                      "name": "Avatar",
+                                                      "fieldName": "avatar",
+                                                      "type": "MEDIA",
+                                                      "required": false,
+                                                      "unique": false,
+                                                      "targetContentType": null,
+                                                      "relationType": null
+                                                    }
+                                                  ]
+                                                }
+                                              ],
+                                              "error": null
+                                            }
+                                            """
+                            )
+                    )
+            )
+    )
     public ResponseEntity<ApiResponse<List<ContentTypeDto>>> getAllContentTypes() {
         List<ContentTypeDto> contentTypes = contentTypeService.getAllContentTypes();
         return ResponseEntity.ok(ApiResponse.success(contentTypes));

@@ -2,6 +2,9 @@ package com.apiforge.content.controller;
 
 import com.apiforge.content.service.ContentService;
 import com.apiforge.common.dto.ApiResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +28,43 @@ public class ContentController {
     }
 
     @GetMapping
+    @Operation(
+            summary = "List content entries by content type",
+            description = "Example uses seeded Author entries (apiId=author).",
+            responses = @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "200",
+                    description = "Seeded content for apiId=author",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = @ExampleObject(
+                                    name = "SeededAuthors",
+                                    value = """
+                                            {
+                                              "success": true,
+                                              "message": null,
+                                              "data": [
+                                                {
+                                                  "id": 1,
+                                                  "name": "Jane Doe",
+                                                  "bio": "Tech journalist focusing on developer tools.",
+                                                  "email": "jane.doe@apiforge.com",
+                                                  "avatar": 2
+                                                },
+                                                {
+                                                  "id": 2,
+                                                  "name": "John Smith",
+                                                  "bio": "Product writer covering hardware and design.",
+                                                  "email": "john.smith@apiforge.com",
+                                                  "avatar": 3
+                                                }
+                                              ],
+                                              "error": null
+                                            }
+                                            """
+                            )
+                    )
+            )
+    )
     public ResponseEntity<ApiResponse<List<Map<String, Object>>>> getAllContent(@PathVariable String apiId) {
         List<Map<String, Object>> contents = contentService.getAllContent(apiId);
         return ResponseEntity.ok(ApiResponse.success(contents));
